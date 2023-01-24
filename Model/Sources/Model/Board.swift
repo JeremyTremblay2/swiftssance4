@@ -23,7 +23,7 @@ public struct Board : CustomStringConvertible {
         return string
     }
     
-    public init?(numberOfRows: Int = 6, numberOfColumns: Int = 7) {
+    public init?(withNumberOfRows numberOfRows: Int = 6, withNumberOfColumns numberOfColumns: Int = 7) {
         guard numberOfRows > 0 && numberOfColumns > 0 else {
             return nil
         }
@@ -50,13 +50,23 @@ public struct Board : CustomStringConvertible {
         }
     }
     
+    subscript(atRow row: Int, andColumn column: Int) -> Int? {
+        get {
+            assert(boundsAreValid(atRow: row, andColumn: column), "Index out of bounds")
+            // Does not works in the subscript because the signature not precise that this scope can throw errors.
+            // throw Error()
+            return grid[row][column]
+        }
+    }
+
+    
     public mutating func insertPiece(from id: Int, atColumn column: Int) -> BoardResult {
         guard column >= 0 && column < numberOfColumns else {
             return .failed(.outOfBounds)
         }
         for r in (0..<numberOfRows).reversed() {
             if grid[r][column] == nil {
-                return insertPiece(from: id, atRow: r, atColumn: column)
+                return insertPiece(from: id, atRow: r, andColumn: column)
             }
         }
         return .failed(.columnFull)
@@ -100,11 +110,11 @@ public struct Board : CustomStringConvertible {
         return true
     }
     
-    private mutating func insertPiece(from id: Int, atRow row: Int, atColumn column: Int) -> BoardResult {
+    private mutating func insertPiece(from id: Int, atRow row: Int, andColumn column: Int) -> BoardResult {
         guard Board.availableIds.contains(id) else {
             return .failed(.invalidPlayerId)
         }
-        guard (0..<numberOfRows).contains(row) && (0..<numberOfColumns).contains(column) else {
+        guard boundsAreValid(atRow: row, andColumn: column) else {
             return .failed(.outOfBounds)
         }
         grid[row][column] = id
@@ -131,5 +141,9 @@ public struct Board : CustomStringConvertible {
             }
         }
         return true
+    }
+    
+    private func boundsAreValid(atRow row: Int, andColumn column: Int) -> Bool {
+        return row >= 0 && row < numberOfRows && column >= 0 && column < numberOfColumns
     }
 }
