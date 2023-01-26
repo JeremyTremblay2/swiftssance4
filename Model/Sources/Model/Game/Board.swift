@@ -1,4 +1,4 @@
-public struct Board : CustomStringConvertible {
+public struct Board : CustomStringConvertible, Hashable {
     private static let defaultDisplay = "-"
     private static let descriptionPlayerIDMapper: [Int?:String] = [nil:" ", 1:"X", 2:"O"]
     private static let availableIds: [Int] = [1, 2]
@@ -7,12 +7,12 @@ public struct Board : CustomStringConvertible {
     
     var grid: [[Int?]]
     
-    public var theGrid: [[Int?]] { grid }
+    public var theGrid: [[Int?]] { grid.reversed() }
     
     public var description: String {
         let dashes = String(repeating: "-", count: numberOfColumns * 4 + 1)
         var string = String("\(dashes)\n")
-        for row in grid {
+        for row in grid.reversed() {
             string.append("|")
             for column in row {
                 string.append(" \(Board.descriptionPlayerIDMapper[column] ?? Board.defaultDisplay) |")
@@ -43,14 +43,14 @@ public struct Board : CustomStringConvertible {
         
         numberOfRows = grid.count
         numberOfColumns = grid[0].count
-        self.grid = grid
+        self.grid = grid.reversed()
         
         if !isGridValid(from: grid) {
             return nil
         }
     }
     
-    subscript(atRow row: Int, andColumn column: Int) -> Int? {
+    public subscript(row: Int, column: Int) -> Int? {
         get {
             assert(boundsAreValid(atRow: row, andColumn: column), "Index out of bounds")
             // Does not works in the subscript because the signature not precise that this scope can throw errors.
@@ -58,13 +58,12 @@ public struct Board : CustomStringConvertible {
             return grid[row][column]
         }
     }
-
     
     public mutating func insertPiece(from id: Int, atColumn column: Int) -> BoardResult {
         guard column >= 0 && column < numberOfColumns else {
             return .failed(.outOfBounds)
         }
-        for r in (0..<numberOfRows).reversed() {
+        for r in 0..<numberOfRows {
             if grid[r][column] == nil {
                 return insertPiece(from: id, atRow: r, andColumn: column)
             }
@@ -77,10 +76,10 @@ public struct Board : CustomStringConvertible {
             return .failed(.outOfBounds)
         }
         if isEmpty(from: column) {
-            return .failed(.emptyColumn)
+            return .failed(.columnEmpty)
         }
         // Used to check if the piece is at the top of the grid. If it is not the case, cancel the action.
-        for r in 0..<numberOfRows {
+        for r in (0..<numberOfRows).reversed() {
             if grid[r][column] != nil {
                 grid[r][column] = nil
                 return .ok
@@ -122,11 +121,15 @@ public struct Board : CustomStringConvertible {
     }
     
     private func isGridValid(from grid: [[Int?]]) -> Bool {
-        var valueWasFound = false
+        var valueWasFound: Bool
         for c in 0..<numberOfColumns {
+            valueWasFound = false
             for r in (0..<numberOfRows).reversed() {
+                if grid[r][c] != nil && !Board.availableIds.contains(grid[r][c]!) {
+                    return false
+                }
                 if r != (numberOfRows-1) && !valueWasFound && grid[r][c] != nil {
-                        return false
+                    return false
                 }
                 valueWasFound = grid[r][c] != nil
             }
@@ -145,5 +148,20 @@ public struct Board : CustomStringConvertible {
     
     private func boundsAreValid(atRow row: Int, andColumn column: Int) -> Bool {
         return row >= 0 && row < numberOfRows && column >= 0 && column < numberOfColumns
+    }
+    
+    public static func == (lhs: Board, rhs: Board) -> Bool {
+        for i in 0..<lhs.numberOfRows {
+            for j in 0..<lhs.numberOfColumns {
+                if lhs.grid[i][j] != rhs.grid[i][j] {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(grid)
     }
 }
