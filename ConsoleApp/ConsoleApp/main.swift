@@ -30,10 +30,8 @@ func testBoardSuppression(withBoard board: inout Board,  atColumn column: Int) {
         switch (reason) {
         case .outOfBounds:
             print("Column \(column) was out of bounds for this board of \(board.numberOfColumns)x\(board.numberOfRows) size. Piece not remove.")
-        case .emptyColumn:
+        case .columnEmpty:
             print("There is no piece at the specified column (\(column)). Impossible to remove the piece.")
-        case .pieceAlreadyPresentAbove:
-            print("A piece already exists above in the column (\(column)). Piece not removed.")
         default:
             print("Unknow error case, piece not removed.")
         }
