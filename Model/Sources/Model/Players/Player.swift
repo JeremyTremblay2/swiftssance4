@@ -1,6 +1,10 @@
-public class Player {
+public class Player : CustomStringConvertible {
     let id: Int
     let name: String
+    
+    public var description: String {
+        return "[\(id)] \(name)"
+    }
     
     public init?(withId id: Int, withName name: String) {
         guard id > 0 && !name.isEmpty else {
@@ -8,5 +12,9 @@ public class Player {
         }
         self.id = id
         self.name = name
+    }
+    
+    public func play(withBoard board: inout Board) -> Int {
+        return 0
     }
 }
