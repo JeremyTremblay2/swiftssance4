@@ -14,7 +14,7 @@ public class Player : CustomStringConvertible {
         self.name = name
     }
     
-    public func play(withBoard board: inout Board) -> Int {
+    public func play(withBoard board: Board) -> Int {
         return 0
     }
 }
