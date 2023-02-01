@@ -1,3 +1,4 @@
+/// 
 public struct Board : CustomStringConvertible, Hashable {
     private static let defaultDisplay = "-"
     private static let descriptionPlayerIDMapper: [Int?:String] = [nil:" ", 1:"X", 2:"O"]
@@ -5,7 +6,7 @@ public struct Board : CustomStringConvertible, Hashable {
     public let numberOfRows: Int
     public let numberOfColumns: Int
     
-    var grid: [[Int?]]
+    private var grid: [[Int?]]
     
     public var theGrid: [[Int?]] { grid.reversed() }
     
