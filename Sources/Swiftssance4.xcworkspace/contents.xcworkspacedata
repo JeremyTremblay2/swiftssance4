@@ -5,6 +5,6 @@
       location = "group:ConsoleApp/ConsoleApp.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Model">
+      location = "group:/Users/etudiant/Documents/swiftssance4/Sources/Connect4Library">
    </FileRef>
 </Workspace>
