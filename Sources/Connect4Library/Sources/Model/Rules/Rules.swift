@@ -11,5 +11,5 @@ public protocol Rules : CustomStringConvertible {
     func createBoard() -> Board
     func isValid(atColumn column: Int, withBoard board: Board) -> Bool
     func checkWin(board: Board) -> GameResult
-    // func isGameOver(atColumn column: Int, withBoard board: Board) -> GameResult
+    func isGameOver(atColumn column: Int, withBoard board: Board) -> GameResult
 }

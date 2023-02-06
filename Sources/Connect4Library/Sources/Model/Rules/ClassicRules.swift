@@ -19,7 +19,7 @@ public class ClassicRules: Rules {
     }
     
     public func isValid(atColumn column: Int, withBoard board: Board) -> Bool {
-        guard column < maxWidth || column >= 0 || !board.isFull() else {
+        guard column < maxWidth && column >= 0 && !board.isFull(atColumn: column) else {
             currentNumberOfAttemps += 1
             if currentNumberOfAttemps == numberMaxOfAttemps {
                 changePlayerOrder()
@@ -47,6 +47,115 @@ public class ClassicRules: Rules {
             return .equality
         }
         
+        return .notFinished
+    }
+    
+    public func isGameOver(atColumn column: Int, withBoard board: Board) -> GameResult {
+        var row: Int = 0
+        for i in 0..<column {
+            if board.theGrid[i][column] != nil {
+                row = i
+                break
+            }
+        }
+        let tempId = board.theGrid[row][column]
+        
+        if tempId != 1 && tempId != 2 {
+            return .notFinished
+        }
+        
+        let id = tempId!
+        
+        let coordinate = Coordinate(atX: column, atY: row)
+        var coordinates: [Coordinate] = [coordinate]
+        
+        // Check horizontal line
+        for i in stride(from: column - 1, through: 0, by: -1) {
+            if board.theGrid[row][i] == id {
+                coordinates.append(Coordinate(atX: i, atY: row))
+            } else {
+                break
+            }
+        }
+        for i in column + 1..<board.numberOfColumns {
+            if board.theGrid[row][i] == id {
+                coordinates.append(Coordinate(atX: i, atY: row))
+            } else {
+                break
+            }
+        }
+        
+        if coordinates.count >= 4 {
+            return .winner(id, coordinates)
+        }
+        
+        coordinates = [coordinate]
+        
+        // Check vertical line
+        for i in row - 1..<0 {
+            if board.theGrid[i][column] == id {
+                coordinates.append(Coordinate(atX: column, atY: i))
+            } else {
+                break
+            }
+        }
+        for i in row + 1..<board.numberOfRows {
+            if board.theGrid[i][column] == id {
+                coordinates.append(Coordinate(atX: column, atY: i))
+            } else {
+                break
+            }
+        }
+        
+        if coordinates.count >= 4 {
+            return .winner(id, coordinates)
+        }
+        
+        coordinates = [coordinate]
+        
+        // Check diagonal from top-left to bottom-right
+        for i in 1..<min(board.numberOfRows - row, board.numberOfColumns - column) {
+            if board.theGrid[row + i][column + i] == id {
+                coordinates.append(Coordinate(atX: column + i, atY: row + i))
+            } else {
+                break
+            }
+        }
+        for i in 1..<min(row + 1, column + 1) {
+            if board.theGrid[row - i][column - i] == id {
+                coordinates.append(Coordinate(atX: column - i, atY: row - i))
+            } else {
+                break
+            }
+        }
+        
+        if coordinates.count >= 4 {
+            return .winner(id, coordinates)
+        }
+        
+        coordinates = [coordinate]
+        
+        // Check diagonal from top-right to bottom-left
+        for i in 1..<min(row + 1, board.numberOfColumns - column) {
+            if board.theGrid[row - i][column + i] == id {
+                coordinates.append(Coordinate(atX: column + i, atY: row - i))
+            } else {
+                break
+            }
+        }
+        for i in 1..<min(board.numberOfRows - row, column + 1) {
+            if board.theGrid[row + i][column - i] == id {
+                coordinates.append(Coordinate(atX: column - i, atY: row + i))
+            } else {
+                break
+            }
+        }
+        
+        if coordinates.count >= 4 {
+            return .winner(id, coordinates)
+        }
+        
+        coordinates = [coordinate]
         return .notFinished
     }
     

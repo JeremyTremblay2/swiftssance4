@@ -29,6 +29,9 @@ public class Game {
             choice = currentPlayer.play(withBoard: board)
             if (!rules.isValid(atColumn: choice, withBoard: board)) {
                 displayer("\(choice) is not a valid choice!")
+                if rules.currentNumberOfAttemps == 0 {
+                    displayer("Too many bad requests, this is now the turn of the next player!")
+                }
             }
             else {
                 let result = board.insertPiece(from: currentPlayer.id, atColumn: choice)
@@ -45,16 +48,14 @@ public class Game {
                     default:
                         displayer("Impossible to add the piece, please retry.")
                     }
-                    if rules.currentNumberOfAttemps == 0 {
-                        displayer("Too many bad requests, this is now the turn of the next player!")
-                    }
+                    
                 default:
                     displayer("Something unusual happened, please retry.")
                 }
                 
-                gameNotFinished = processNewPiecesInserted()
-                changeCurrentPlayer(withCurrentPlayer: &currentPlayer)
+                gameNotFinished = processNewPiecesInserted(withPieceInsertedAt: choice)
             }
+            changeCurrentPlayer(withCurrentPlayer: &currentPlayer)
         }
         displayer("Congratulations to all the participants! Bye!")
     }
@@ -63,7 +64,7 @@ public class Game {
         player = (rules.currentPlayerId == 1) ? player1 : player2
     }
     
-    fileprivate func processNewPiecesInserted() -> Bool {
+    fileprivate func processNewPiecesInserted(withPieceInsertedAt column: Int) -> Bool {
         let finalResult = rules.checkWin(board: board)
         switch (finalResult) {
         case .equality:
