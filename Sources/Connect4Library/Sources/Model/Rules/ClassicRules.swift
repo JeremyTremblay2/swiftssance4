@@ -1,22 +1,38 @@
-public class StandardRules: Rules {
-    let minWidth = 5
-    let maxWidth = 10
-    let minHeight = 5
-    let maxHeight = 10
-    let winSequence = 4
-    var currentPlayerId: Int = 1
+public class ClassicRules: Rules {
+    public let minWidth = 7
+    public let maxWidth = 7
+    public let minHeight = 6
+    public let maxHeight = 6
+    public let winSequence = 4
+    public let numberMaxOfAttemps = 3
+    public private (set) var currentPlayerId: Int = 1
+    public private (set) var currentNumberOfAttemps = 0
     
-    public func isValid(withPlayerId id: Int, AtColumn column: Int, withBoard board: Board) -> Bool {
-        guard id == 1 || id == 2 || column < maxWidth || column >= 0 || !board.isFull() else {
+    public var description: String = "Classic Rules"
+    
+    public init() {
+        
+    }
+    
+    public func createBoard() -> Board {
+        return Board(withNumberOfRows: 6, withNumberOfColumns: 7)!
+    }
+    
+    public func isValid(atColumn column: Int, withBoard board: Board) -> Bool {
+        guard column < maxWidth || column >= 0 || !board.isFull() else {
+            currentNumberOfAttemps += 1
+            if currentNumberOfAttemps == numberMaxOfAttemps {
+                changePlayerOrder()
+            }
             return false
         }
-        currentPlayerId = (currentPlayerId == 1) ? 2 : 1
+        changePlayerOrder()
         return true
     }
     
     public func checkWin(board: Board) -> GameResult {
-        var resultPlayer1 = hasPlayerWon(withBoard: board, from: 1)
-        var resultPlayer2 = hasPlayerWon(withBoard: board, from: 2)
+        let resultPlayer1 = hasPlayerWon(withBoard: board, from: 1)
+        let resultPlayer2 = hasPlayerWon(withBoard: board, from: 2)
         if (resultPlayer1 == GameResult.winner(1, [])) {
             if (resultPlayer2 == GameResult.winner(2, [])) {
                 return .equality
@@ -34,12 +50,12 @@ public class StandardRules: Rules {
         return .notFinished
     }
     
-    public func checkHorizontalAlignment(withBoard board: Board, forPlayer playerId: Int) -> (Bool, [Coordinate]?) {
+    private func checkHorizontalAlignment(withBoard board: Board, forPlayer playerId: Int) -> (Bool, [Coordinate]?) {
         for y in 0..<board.numberOfRows {
             var sequenceCount = 0
             var winSequenceStart: [Coordinate] = []
             for x in 0..<board.numberOfColumns {
-                if board.theGrid[x][y] == playerId {
+                if board.theGrid[y][x] == playerId {
                     winSequenceStart.append(Coordinate(atX: x, atY: y))
                     sequenceCount += 1
                     if sequenceCount == winSequence {
@@ -55,7 +71,7 @@ public class StandardRules: Rules {
         return (false, nil)
     }
     
-    public func checkVerticalAlignment(withBoard board: Board, forPlayer playerId: Int) -> (Bool, [Coordinate]?) {
+    private func checkVerticalAlignment(withBoard board: Board, forPlayer playerId: Int) -> (Bool, [Coordinate]?) {
         for c in 0..<board.numberOfColumns {
             var sequenceCount = 0
             var winSequenceStart: [Coordinate] = []
@@ -76,7 +92,7 @@ public class StandardRules: Rules {
         return (false, nil)
     }
     
-    public func checkRightDiagonalAlignment(withBoard board: Board, forPlayer playerId: Int) -> (Bool, [Coordinate]?) {
+    private func checkRightDiagonalAlignment(withBoard board: Board, forPlayer playerId: Int) -> (Bool, [Coordinate]?) {
         var coordinates: [Coordinate] = []
         for i in 0..<(board.numberOfRows - winSequence + 1) {
             for j in (winSequence - 1)..<(board.numberOfColumns) {
@@ -104,7 +120,7 @@ public class StandardRules: Rules {
         return (false, nil)
     }
     
-    public func checkLeftDiagonalAlignment(withBoard board: Board, forPlayer playerId: Int) -> (Bool, [Coordinate]?) {
+    private func checkLeftDiagonalAlignment(withBoard board: Board, forPlayer playerId: Int) -> (Bool, [Coordinate]?) {
         var coordinates: [Coordinate] = []
         for i in 0..<(board.numberOfRows - winSequence + 1) {
             for j in 0..<(board.numberOfColumns - winSequence + 1) {
@@ -151,5 +167,10 @@ public class StandardRules: Rules {
             return .winner(playerId, result.1!)
         }
         return .notFinished
+    }
+    
+    private func changePlayerOrder() {
+        currentNumberOfAttemps = 0
+        currentPlayerId = (currentPlayerId == 1) ? 2 : 1
     }
 }
