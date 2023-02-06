@@ -1,6 +1,10 @@
-public struct Coordinate : Hashable {
+public struct Coordinate : Hashable, CustomStringConvertible {
     var x: Int
     var y: Int
+    
+    public var description: String {
+        "[\(x);\(y)]"
+    }
     
     init(atX x: Int, atY y: Int) {
         self.x = x

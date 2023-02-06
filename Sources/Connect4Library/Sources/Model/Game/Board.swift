@@ -1,7 +1,7 @@
 /// 
 public struct Board : CustomStringConvertible, Hashable {
     private static let defaultDisplay = "-"
-    private static let descriptionPlayerIDMapper: [Int?:String] = [nil:" ", 1:"X", 2:"O"]
+    private static let descriptionPlayerIDMapper: [Int?:String] = [nil:".", 1:"X", 2:"O"]
     private static let availableIds: [Int] = [1, 2]
     public let numberOfRows: Int
     public let numberOfColumns: Int
