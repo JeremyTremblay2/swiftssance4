@@ -18,7 +18,7 @@ func input() -> Int {
 
 // You can customize the names if you want !
 var player1 = Human(withId: 1, withName: "Jérémy", andScanner: input)
-var player2 = AI(withId: 2, withName: "Simple AI")
+var player2 = MinamaxAI(withId: 2, withName: "Hardcore AI")
 let rules = ClassicRules()
 
 
