@@ -88,7 +88,7 @@ public class ClassicRules: Rules {
     /// The result could be equality, a win for player 1, a win for player 2, or the game is not finished yet.
     public func isGameOver(atColumn column: Int, withBoard board: Board) -> GameResult {
         var row: Int = 0
-        for i in 0..<column {
+        for i in 0..<board.numberOfRows {
             if board.theGrid[i][column] != nil {
                 row = i
                 break
@@ -128,11 +128,13 @@ public class ClassicRules: Rules {
         coordinates = [coordinate]
         
         // Check vertical line
-        for i in row - 1..<0 {
-            if board.theGrid[i][column] == id {
-                coordinates.append(Coordinate(atX: column, atY: i))
-            } else {
-                break
+        if (row > 0) {
+            for i in 0..<(row - 1) {
+                if board.theGrid[i][column] == id {
+                    coordinates.append(Coordinate(atX: column, atY: i))
+                } else {
+                    break
+                }
             }
         }
         for i in row + 1..<board.numberOfRows {
