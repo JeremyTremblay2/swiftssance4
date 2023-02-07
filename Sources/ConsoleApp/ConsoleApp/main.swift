@@ -18,7 +18,8 @@ func input() -> Int {
 
 // You can customize the names if you want !
 var player1 = Human(withId: 1, withName: "Jérémy", andScanner: input)
-var player2 = MinamaxAI(withId: 2, withName: "Hardcore AI")
+var player2 = MinamaxAI(withId: 2, withName: "Hardcore AI", withDifficultyLevel: 3) // Change the level of difficulty by increasing the level of the AI.
+// Warning: more than 3 will cause the program to be slower, the time that the AI will take to play will exponentially increase.
 let rules = ClassicRules()
 
 
