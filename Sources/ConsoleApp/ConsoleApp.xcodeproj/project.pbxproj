@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC64F4022996A43D00DB00B9 /* gameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC64F4012996A43D00DB00B9 /* gameTests.swift */; };
 		EC79348E29918F99001E8552 /* boardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC79348D29918F99001E8552 /* boardTests.swift */; };
 		ECAE79652979433A00CD2206 /* Model in Frameworks */ = {isa = PBXBuildFile; productRef = ECAE79642979433A00CD2206 /* Model */; };
 		ECCAC3DA297819A6007AABC6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECCAC3D9297819A6007AABC6 /* main.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EC64F4012996A43D00DB00B9 /* gameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gameTests.swift; sourceTree = "<group>"; };
 		EC79348D29918F99001E8552 /* boardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = boardTests.swift; sourceTree = "<group>"; };
 		ECCAC3D6297819A6007AABC6 /* ConsoleApp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ConsoleApp; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECCAC3D9297819A6007AABC6 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 			children = (
 				ECCAC3D9297819A6007AABC6 /* main.swift */,
 				EC79348D29918F99001E8552 /* boardTests.swift */,
+				EC64F4012996A43D00DB00B9 /* gameTests.swift */,
 			);
 			path = ConsoleApp;
 			sourceTree = "<group>";
@@ -137,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC79348E29918F99001E8552 /* boardTests.swift in Sources */,
+				EC64F4022996A43D00DB00B9 /* gameTests.swift in Sources */,
 				ECCAC3DA297819A6007AABC6 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
