@@ -45,7 +45,7 @@ Here you can see the visual of the final application in a console app:
 
 ## 📌 Documentation
 
-Some documentation can be found in the [Wiki](https://codefirst.iut.uca.fr/git/jeremy.tremblay/swiftssance4/wiki) of this application. You can found the class diagram and a documentation to explain you how is construct this Connect 4 game!
+Some documentation can be found in the [Wiki](https://github.com/JeremyTremblay2/swiftssance4/wiki) of this application. You can found the class diagram and a documentation to explain you how is construct this Connect 4 game!
 
 Also, look at the `Documentation` folder at the root of this repository!
 
